@@ -10,7 +10,16 @@ import toast from "react-hot-toast";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters")
+  .refine((val) => /[A-Z]/.test(val), {
+    message: "Password must include at least one uppercase letter",
+  })
+  .refine((val) => /[a-z]/.test(val), {
+    message: "Password must include at least one lowercase letter",
+  })
+  .refine((val) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(val), {
+    message: "Password must include at least one special character",
+  }),
   rememberMe: z.boolean().optional(),
 });
 
